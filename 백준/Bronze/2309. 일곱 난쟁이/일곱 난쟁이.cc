@@ -1,44 +1,60 @@
 #include <iostream>
-#include <set>
-using namespace std;
+#include <algorithm>
+#include <vector>
 
-int main()
+std::vector<int> vec;
+
+void select(int start, int sum);
+
+int main() 
 {
-	set<int> data;
-	int input, i = 9, sum = 0;
-	set<int>::iterator sIt; //시작 이터
-	set<int>::iterator eIt; //엔드 이터
+    std::ios_base :: sync_with_stdio(false);
+    std::cin.tie(NULL);
+    std::cout.tie(NULL);
 
-	while (i-- > 0)
-	{
-		cin >> input;
-		data.insert(input);
-		
-		sum += input;
-	}
+    int sum = 0;
 
-	sIt = data.begin();
-	eIt = --data.end();
-	
-	while(sIt != data.end())
-	{
-		while (eIt != sIt)
-		{
-			if ((sum - *eIt - *sIt) == 100)
-			{
-				data.erase(eIt);
-				data.erase(sIt);
-				for (auto a : data) cout << a << "\n";
-				return 0;
-			}
-			--eIt;
-		}
+    for(int i = 0; i < 9; i++)
+    {
+        int a;
+        std::cin >> a;
+        vec.push_back(a);
+        sum += a;
+    }
 
-		eIt = --data.end();
-		++sIt;
-	}
+    std::sort(vec.begin(), vec.end());
 
+    std::vector<int>::iterator sit = vec.begin();
+    std::vector<int>::iterator eit = vec.end() - 1;
 
-		
-	return 0;
+    while(sit !=  vec.end() - 1)
+    {
+        while(sit != eit)
+        {
+            if((sum - *sit - *eit) == 100 )
+            {
+                *sit = 0;
+                *eit = 0;
+                for(int a : vec)
+                {
+                    if(a != 0)
+                        std::cout << a << "\n";
+                }
+                return 0;
+            }
+            --eit;
+        }
+        eit = vec.end()-1;
+        ++sit;
+    }
+
 }
+
+
+
+
+
+
+
+
+
