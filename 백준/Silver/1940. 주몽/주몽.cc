@@ -1,6 +1,6 @@
 #include<iostream>
-#include<set>
-
+#include<vector>
+#include<algorithm>
 int main()
 {
 	std::ios_base::sync_with_stdio(false);
@@ -8,7 +8,7 @@ int main()
 	
 	int n, m , count = 0;
 
-	std::set<int> container;
+	std::vector<int> container;
 
 	std::cin >> n >> m;
 
@@ -16,12 +16,15 @@ int main()
 	{
 		int input;
 		std::cin >> input;
-		container.insert(input);
+		container.push_back(input);
 	}
+	
+	std::sort(container.begin(), container.end());
 
-	std::set<int>::iterator front = container.begin();
-	std::set<int>::iterator back = container.end();
+	std::vector<int>::iterator front = container.begin();
+	std::vector<int>::iterator back = container.end();
 	back--;
+
 	while (front != back)
 	{
 		int sum = (*front) + (*back);
