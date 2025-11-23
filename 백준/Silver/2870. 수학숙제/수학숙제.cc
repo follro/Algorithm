@@ -9,11 +9,7 @@ std::vector <std::string> result;
 bool cmp(const std::string& a , const std::string& b)
 {
 	if (a.length() == b.length())
-	{
-		for (int i = 0; i < a.length(); i++)
-			if (a[i] != b[i])
-				return a[i] < b[i];
-	}
+		return a < b;
 
 	return a.length() < b.length();
 }
