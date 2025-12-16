@@ -5,24 +5,25 @@
 int n;
 int target;
 int head;
-int count= 0;
 
 std::vector<std::vector<int>> nodes;
 
-void dfs(int curNum)
+int dfs(int curNum)
 {
-	if (nodes[curNum].empty() || (nodes[curNum][0] == target && nodes[curNum].size() == 1))
-	{
-		count++;
-		return;
-	}
-
-
+	int child = 0;
+	int ret = 0;
 	for (auto node : nodes[curNum])
 	{
-		if(node != target)
-			dfs(node);
+		if (node != target)
+		{
+			ret += dfs(node);
+			child++;
+		}
+
 	}
+
+	if (child == 0) return 1;
+	else return ret;
 }
 
 int main()
@@ -46,10 +47,10 @@ int main()
 	std::cin >> target;
 
 	nodes[target].clear();
-	if(target != head)
-		dfs(head);
-
-	std::cout << count;
+	if (target != head)
+		std::cout << dfs(head);
+	else
+		std::cout << "0";
 	
 
 	return 0;
