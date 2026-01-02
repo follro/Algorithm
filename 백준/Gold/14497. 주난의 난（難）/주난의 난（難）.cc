@@ -1,80 +1,77 @@
 #include<iostream>
 #include<queue>
 
-int n, m;
-char map[301][301];
-int visited[301][301];
+
+int n, m, turn = 0;
+int targetX, targetY;
+int startX, startY;
+
+char map[304][304];
+int visited[304][304];
+
 int dy[4] = { 1, 0, -1, 0 };
 int dx[4] = { 0, 1, 0, -1 };
-int juX, juY;
-int doroboX, doroboY;
-int turn = 0;
-std::queue<std::pair<int, int>> q;
 
-
+std::queue<std::pair<int, int>> q0;
+std::queue<std::pair<int, int>> q1;
 int main()
 {
 	std::ios_base::sync_with_stdio(false);
 	std::cin.tie(NULL); std::cout.tie(NULL);
-	
+
 	std::cin >> n >> m;
-	std::cin >> juY >> juX >> doroboY >> doroboX;
+	std::cin >> startY >> startX >> targetY >> targetX;
 
 	for (int i = 1; i <= n; i++)
 		for (int j = 1; j <= m; j++)
+		{
 			std::cin >> map[i][j];
-	
-	map[juY][juX] = '*';
-	map[doroboY][doroboX] = '#';
+			visited[i][j] = 0;
+		}
+	q1.push({ startY, startX });
+	visited[startY][startX] = 1;
 
-	q.push({ juY, juX });
-	std::fill(&visited[0][0], &visited[0][0] + 301 * 301, 0);
-	visited[juY][juX] = 1;
-
-	while (true)
+	while (!q1.empty())
 	{
 		turn++;
-		bool flag = false;
-		std::queue<std::pair<int, int>> nextQ;
-
-		while(!q.empty())
+		while (!q1.empty())
 		{
-			int cy = q.front().first;
-			int cx = q.front().second;
-			q.pop();
+			q0.push(q1.front());
+			q1.pop();
+		}
 
-			for (int j = 0; j < 4; j++)
+		while (!q0.empty())
+		{
+			int curY = q0.front().first;
+			int curX = q0.front().second;
+			q0.pop();
+
+			for (int i = 0; i < 4; i++)
 			{
-				int ny = cy + dy[j];
-				int nx = cx + dx[j];
+				int nextY = curY + dy[i];
+				int nextX = curX + dx[i];
 
-				if (ny < 1 || nx < 1 || ny > n || nx > m || visited[ny][nx]) continue;
+				if (nextY < 1 || nextY > n || nextX < 1 || nextX > m || visited[nextY][nextX]) continue;
 
-				visited[ny][nx] = 1;
-
-				if (map[ny][nx] == '1')
-					nextQ.push({ ny, nx });
-
-				switch (map[ny][nx])
+				switch (map[nextY][nextX])
 				{
 				case '0':
-					q.push({ ny, nx });
+					q0.push({ nextY, nextX });
+					visited[nextY][nextX] = 1;
 					break;
 				case '1':
-					nextQ.push({ ny, nx });
+					q1.push({ nextY, nextX });
+					visited[nextY][nextX] = 1;
 					break;
 				case '#':
-					flag = true;
-					break;
+					std::cout << turn;
+					return 0;
 				}
-				if (flag) break;
-			}
-			if (flag) break;
-		}
-		if (flag) break;
 
-		q = nextQ;
+			}
+
+		}
 	}
 
-	std::cout << turn;
+	return 0;
 }
