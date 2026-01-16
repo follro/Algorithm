@@ -60,7 +60,7 @@ int main()
 		}
 	}
 
-	for (int select = 1; select <= (1 << n); select++)
+	for (int select = 1; select < (1 << n); select++)
 	{
 		colCheck(select);
 
