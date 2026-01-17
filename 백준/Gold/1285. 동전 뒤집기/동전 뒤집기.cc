@@ -1,75 +1,62 @@
-#include <iostream>
-#include<vector>
+#include<iostream>
 #include<string>
 #include<algorithm>
-
+#define MAX 987654321;
 int n;
-std::vector<std::vector<bool>> coins;
+int map[24];
+int retCnt = MAX;
 
-int minNum = 987654321;
-
-void colCheck(int select)
-{
-	for (int i = 0; i < n; i++)
-	{
-		if (!(select & (1 << i))) continue;
-
-		for (int j = 0; j < n; j++)
-			coins[i][j] = !coins[i][j];
-	}
-}
-
-void rowCheck(int select)
-{
-	int count = 0;
-	for (int i = 0; i < n; i++)
-	{
-		int tureNum = 0;
-		for (int j = 0; j < n; j++)
-		{
-			if (coins[j][i])
-				tureNum++;
-		}
-
-
-		count += std::min(n - tureNum, tureNum);
-	}
-
-	minNum = std::min(count, minNum);
-}
 
 int main()
 {
 	std::ios_base::sync_with_stdio(false);
 	std::cin.tie(NULL); std::cout.tie(NULL);
-	
+
 	std::cin >> n;
-	std::cin.ignore();
+
 	for (int i = 0; i < n; i++)
 	{
 		std::string input;
-		coins.push_back(std::vector<bool>());
 		std::cin >> input;
-		
-		for (char v : input)
+
+		for (int j = 0; j < n; j++)
 		{
-			if (v == 'T')
-				coins[i].push_back(false);
-			else
-				coins[i].push_back(true);
+			if (input[j] == 'T')
+				map[i] += (1 << j);
 		}
 	}
 
-	for (int select = 1; select < (1 << n); select++)
+	for (int i = 0; i <= (1 << (n - 1)); i++)
 	{
-		colCheck(select);
+		for (int j = 0; j < n; j++)
+		{
+			if (i & (1 << j))
+				map[j] = ~map[j];
+		}
 
-		rowCheck(select);
+		int cnt = 0;
+		//열검사
+		for (int j = 0; j < n; j++)
+		{
+			int colCnt = 0;
+			for (int k = 0; k < n; k++)
+			{
+				if (map[k] & (1 << j))
+					colCnt++;
+			}
+			cnt += std::min(colCnt, n - colCnt);
+		}
+		
+		retCnt = std::min(retCnt, cnt);
 
-		colCheck(select);
+		for (int j = 0; j < n; j++)
+		{
+			if (i & (1 << j) )
+				map[j] = ~map[j];
+		}
 	}
 
-	std::cout << minNum;
+	std::cout << retCnt;
 
 	return 0;
 }
